@@ -4,74 +4,81 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Vic Swap Protocol</title>
-  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <style>
+    body {
+      background: #111;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 100px;
+    }
+    .swap-box {
+      background: #222;
+      padding: 30px;
+      border-radius: 12px;
+      width: 300px;
+      margin: auto;
+    }
+    input {
+      width: 80%;
+      padding: 10px;
+      margin: 10px 0;
+    }
+    button {
+      background: #7f5af0;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 8px;
+    }
+  </style>
 </head>
 <body>
-  <header class="header">
-    <div class="logo">
-      <img src="logo.svg" alt="Vic Swap Logo" />
-      <span>Vic Swap <strong>PROTOCOL</strong></span>
-    </div>
-    <nav class="nav">
-      <a href="#">Swap</a>
-      <a href="#">Tokenize</a>
-      <a href="#">Airdrop</a>
-      <a href="#">Docs</a>
-      <a href="#">Whitepaper</a>
-      <a href="#">Roadmap</a>
-      <a href="#">Contact</a>
-    </nav>
-  </header>
+  <div class="swap-box">
+    <h2>Swap</h2>
+    <label>From (ETH)</label><br>
+    <input id="from-amount" type="text" placeholder="0.0"><br>
+    <label>To (USDT)</label><br>
+    <input id="to-amount" type="text" placeholder="0.0"><br><br>
+    <button id="connect-wallet">Connect Wallet</button><br><br>
+    <span id="wallet-address" style="font-size: 12px;"></span>
+  </div>
 
-  <main>
-    <div class="swap-container">
-      <h2 class="swap-title">Swap</h2>
-      <div class="swap-box">
-        <div class="swap-section">
-          <label>From</label>
-          <div class="input-group">
-            <input type="text" placeholder="0.0" />
-            <button class="token-button"><img src="eth-icon.svg" /> ETH</button>
-          </div>
-        </div>
-        <div class="arrow">↓</div>
-        <div class="swap-section">
-          <label>To</label>
-          <div class="input-group">
-            <input type="text" placeholder="0.0" />
-            <button class="token-button"><img src="usdt-icon.svg" /> USDT</button>
-          </div>
-     </div>
-    <div class="network-status">
-      <div id="wallet-info" style="display: none;">
-  <span id="wallet-address"></span>
-          <button id="connect-wallet-button" class="connect-button">Connect Wallet</button> 
-      </div>
- </main>
- <script>
-    const connectButton = document.getElementById('.connect-button');
-    connectButton.addEventListener('click', async () => {
-      if (typeof window.ethereum !== 'undefined') {
-        try {
-          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        // Проверка сети Arbitrum
-const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-if (chainId !== '0xa4b1') {
-  alert('Please switch to the Arbitrum One network.');
-  return;
-}
-   const walletAddress = accounts[0];
-         document.getElementById('wallet-address').innerText = walletAddress;
-         document.getElementById('wallet-info').style.display = 'block';
-   connectButton.innerText = `Connected: ${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`;
-          connectButton.disabled = true;
-        } catch (error) {
-          console.error('User rejected the connection');
-        }
-      } else {
-        alert('MetaMask installed.');
+  <script>
+    const connectButton = document.getElementById('connect-wallet');
+    const addressSpan = document.getElementById('wallet-address');
+
+    connectButton.onclick = async () => {
+      if (typeof window.ethereum === 'undefined') {
+        alert('MetaMask or Wallet not found');
+        return;
       }
-    });
-<script type="module" src="./main.js"></script>
+
+      try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        await provider.send("eth_requestAccounts", []);
+        const signer = provider.getSigner();
+        const address = await signer.getAddress();
+
+        const network = await provider.getNetwork();
+        if (network.chainId !== 42161) {
+          alert('Switch to Arbitrum network');
+          return;
+        }
+
+        addressSpan.innerText = `Connected: ${address.slice(0, 6)}...${address.slice(-4)}`;
+        connectButton.disabled = true;
+        connectButton.innerText = "Connected";
+
+      } catch (err) {
+        console.error(err);
+        alert('Wallet connection failed');
+      }
+    };
+  </script>
 </body>
 </html>
+
