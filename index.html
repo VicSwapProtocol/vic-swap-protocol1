@@ -41,9 +41,7 @@
             <input type="text" placeholder="0.0" />
             <button class="token-button"><img src="usdt-icon.svg" /> USDT</button>
           </div>
-        </div>
-        <button id="connect-wallet-button" class="connect-button">Connect Wallet</button>
-      </div>
+     </div>
     <div class="network-status">
       <div id="wallet-info" style="display: none;">
   <span id="wallet-address"></span>
@@ -51,7 +49,7 @@
       </div>
  </main>
  <script>
-    const connectButton = document.querySelector('.connect-button');
+    const connectButton = document.getElementById('.connect-button');
     connectButton.addEventListener('click', async () => {
       if (typeof window.ethereum !== 'undefined') {
         try {
