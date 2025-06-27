@@ -51,29 +51,9 @@
       </div>
  </main>
  <script>
-    const connectButton = document.querySelector('.connect-button');
-    connectButton.addEventListener('click', async () => {
-      if (typeof window.ethereum !== 'undefined') {
-        try {
-          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        // Проверка сети Arbitrum
-const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-if (chainId !== '0xa4b1') {
-  alert('Please switch to the Arbitrum One network.');
-  return;
-}
-   const walletAddress = accounts[0];
-         document.getElementById('wallet-address').innerText = walletAddress;
-         document.getElementById('wallet-info').style.display = 'block';
-   connectButton.innerText = `Connected: ${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`;
-          connectButton.disabled = true;
-        } catch (error) {
-          console.error('User rejected the connection');
-        }
-      } else {
-        alert('MetaMask installed.');
-      }
-    });
+       </div>
+    <button id="connectWallet" class="connect-button">Connect Wallet</button>
+  </div>
   </script>
     </div>
 </main>
