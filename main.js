@@ -5,6 +5,7 @@ const provider = new ethers.providers.Web3Provider(window.ethereum);
 const signer = provider.getSigner();
 const routerAddress = '0xE592427A0AEce92De3Edee1F18E0157C05861564'; // Uniswap V3 Router
 const tokenIn = '0xC02aaA39b223FE8D0A0E5C4F27eAD9083C756Cc2';  // ETH (WETH)
+const tokenOut = '0xaf88d065e77c8cC2239327C5EDb3A432268e5831'; // USDC (Arbitrum)
 const fee = 3000; // 0.3% комиссия пула
 
 const router = new ethers.Contract(routerAddress, IUniswapV3RouterABI, signer);
