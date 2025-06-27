@@ -41,4 +41,7 @@ async function loadUniswapTokens() {
   console.log(tokens); // или обработай как нужно
 }
 loadUniswapTokens();
-<button id="connect-wallet-button" class="connect-button">Connect Wallet</button>  
+
+document.getElementById('swap-button').addEventListener('click', () => {
+  swapTokens('0.01'); // Пример: свап 0.01 ETH
+});
